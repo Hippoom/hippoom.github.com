@@ -1,7 +1,8 @@
 ---
 
 title: 用classycle自动代码走查  
-category: continuous delivery
+category: continuous delivery  
+layout: default
 
 ---
 
@@ -30,10 +31,10 @@ list-2 使用classycle:check执行检查
         <version>0.4</version>
         <configuration>
         	<dependencyDefinitionFile>
-				src/test/resources/classycle-dependency-definition
+                src/test/resources/classycle-dependency-definition
             </dependencyDefinitionFile>
             <resultRenderer>
-          		classycle.dependency.DefaultResultRenderer
+                classycle.dependency.DefaultResultRenderer
             </resultRenderer>
 	</plugin>
 
@@ -43,8 +44,8 @@ list-2 使用classycle:check执行检查
    
     show onlyShortestPaths allResults
     check [root] independentOf [log4j]
-  	Unexpected dependencies found:
-  		sample.bar.Bar
+    Unexpected dependencies found:
+        sample.bar.Bar
     		-> org.apache.log4j.Logger
 
 
@@ -67,15 +68,15 @@ list-3 将检查任务绑定到maven verify中执行
                 	<goal>check</goal>
                 </goals>
                 <configuration>
-                	<dependencyDefinitionFile>
-                                src/test/resources/classycle-dependency-definition
-                   </dependencyDefinitionFile>
-                   <resultRenderer>
-                   classycle.dependency.DefaultResultRenderer
-                   </resultRenderer>
-               </configuration>
-           </execution>
-       </executions>
+                    <dependencyDefinitionFile>
+                        src/test/resources/classycle-dependency-definition
+                    </dependencyDefinitionFile>
+                    <resultRenderer>
+                        classycle.dependency.DefaultResultRenderer
+                    </resultRenderer>
+                </configuration>
+            </execution>
+        </executions>
 	</plugin>
 
 最后记得让持续集成服务器把classycle生成的报告保存下来，方便团队排问题。  
@@ -112,6 +113,7 @@ list-5 方案一：按职责划分
     	User
     	Transaction
     	Shipment
+    	
 list-6 方案二：按领域划分
 	
 	user/
