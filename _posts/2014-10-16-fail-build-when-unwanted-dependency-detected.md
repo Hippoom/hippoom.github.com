@@ -146,3 +146,11 @@ classycle-maven-plugin还支持把依赖规则嵌入到pom.xml中，但我更推
    
 对于gradle项目，我暂时还没有找到现成的插件，不过classycle本身支持ant task，所以可以用gradle ant插件来集成。
 
+### 参考资料
+
+[classycle](http://classycle.sourceforge.net/)
+
+[classycle-maven-plugin](https://github.com/hcoles/classycle-maven-plugin)
+
+[directory per domain model or directory per layer, role](http://stackoverflow.com/questions/21225937/directory-per-domain-model-or-directory-per-layer-role/21226273#21226273)
+
