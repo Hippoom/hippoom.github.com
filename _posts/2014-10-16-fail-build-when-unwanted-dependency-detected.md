@@ -20,24 +20,27 @@ list-1 检查代码库不依赖于log4j，保存在src/test/resources/classycle-
     [root] = your.project.root.*
 
     check [root] independentOf [log4j]
-
+    
 如果是Maven项目，可以很方便的执行检查：
 
 list-2 使用classycle:check执行检查
 
+{% highlight xml %}
+
     <plugin>
-    	<groupId>org.pitest</groupId>
+        <groupId>org.pitest</groupId>
         <artifactId>classycle-maven-plugin</artifactId>
         <version>0.4</version>
         <configuration>
-        	<dependencyDefinitionFile>
+            <dependencyDefinitionFile>
                 src/test/resources/classycle-dependency-definition
             </dependencyDefinitionFile>
             <resultRenderer>
                 classycle.dependency.DefaultResultRenderer
             </resultRenderer>
-	</plugin>
-
+    </plugin>
+	
+{% endhighlight %}
 
 
 如果classycle找到了不符合规则的依赖，会输出到target/classycle目录下的报告中。
@@ -55,6 +58,8 @@ list-2 使用classycle:check执行检查
 静态检查工具使得团队可以把更多时间投入到推敲代码上，去发现新的问题，而不是枯燥地查找已知的缺陷。既然已经有了廉价的检查手段，本着越早发现问题越容易解决的原则，不妨把检查任务集成到项目的构建过程中。如果团队已经建立了部署流水线，可以让流水线来执行检查，如果classycle发现有违反规则的依赖会使构建失败。
 
 list-3 将检查任务绑定到maven verify中执行
+
+{% highlight xml %}
 
     <plugin>
     	<groupId>org.pitest</groupId>
@@ -78,6 +83,8 @@ list-3 将检查任务绑定到maven verify中执行
             </execution>
         </executions>
 	</plugin>
+
+{% endhighlight %}
 
 最后记得让持续集成服务器把classycle生成的报告保存下来，方便团队排问题。  
 

@@ -1,1 +1,3 @@
 permalink: blogs/:title.html
+highlighter: pygments
+github: [Repository metadata]
