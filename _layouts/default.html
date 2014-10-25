@@ -1,16 +1,54 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <title>{{ page.title }}</title>
-        <link href="/stylesheets/styles.css" media="screen, projection" rel="stylesheet" type="text/css">
-    </head>
-    <body>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>{{ page.title }}</title>
+    <link href="/stylesheets/styles.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <style>
+        .m {
+            background: none repeat scroll 0 0 #FFFFFF;
+            clear: both;
+            margin: auto;
+            width: 960px;
+        }
+
+        .index_l {
+            float: left;
+            width: 750px;
+        }
+
+        .index_r {
+            float: right;
+            overflow: hidden;
+            width: 200px;
+        }
+    </style>
+
+
+</head>
+<body>
+<div class="m">
+    <hr>
+    <div class="index_l">
         <header>
             <h1 class="entry-title">{{ page.title }}</h1>
+            <hr>
             <p class="meta">
         </header>
 
         {{ content }}
-    </body>
+    </div>
+    <div class="index_r">
+        {% for category in site.categories %}
+        <h2>{{ category | first }}</h2>
+        <span>{{ category | last | size }}</span>
+        <ul class="arc-list">
+            {% for post in category.last %}
+            <li>{{ post.date | date:"%d/%m/%Y"}} - <a href="{{ post.url }}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+</body>
 </html>
