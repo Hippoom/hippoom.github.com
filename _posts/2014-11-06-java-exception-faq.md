@@ -1,7 +1,7 @@
 ---
 
 title:   JAVA异常设计FAQ
-category: flaw  
+category: ramblings  
 layout: default
 
 ---
