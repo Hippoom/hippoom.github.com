@@ -86,7 +86,7 @@ if (rowAffected == 0) {
 | where resource_id = ? and version = ?               | name = ?   
 |                                                     | where resource_id = ? and version = ?    
 | commit txn                                          |                 
-|                                                     | commit txn because it cannot read uncommited version change                           
+|                                                     | rollback txn because version comparing fails
 |                                                     |                                        
 {% endhighlight %}
 
