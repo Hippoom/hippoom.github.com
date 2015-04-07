@@ -1,0 +1,5 @@
+# generated files
+_site/
+
+# local ruby env
+.ruby-version

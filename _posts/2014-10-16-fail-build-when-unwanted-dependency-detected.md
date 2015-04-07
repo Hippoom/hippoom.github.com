@@ -15,12 +15,12 @@ layout: default
 list-1 检查代码库不依赖于log4j，保存在src/test/resources/classycle-dependency-definition中
 
     show allResults
-    
+
     [log4j] = org.apache.log4j.*
     [root] = your.project.root.*
 
     check [root] independentOf [log4j]
-    
+
 如果是Maven项目，可以很方便的执行检查：
 
 list-2 使用classycle:check执行检查
@@ -39,12 +39,12 @@ list-2 使用classycle:check执行检查
                 classycle.dependency.DefaultResultRenderer
             </resultRenderer>
     </plugin>
-	
+
 {% endhighlight %}
 
 
 如果classycle找到了不符合规则的依赖，会输出到target/classycle目录下的报告中。
-   
+
     show onlyShortestPaths allResults
     check [root] independentOf [log4j]
     Unexpected dependencies found:
@@ -97,13 +97,13 @@ list-3 将检查任务绑定到maven verify中执行
 list-4 确保domain是onion架构中的“核心”
 
     show allResults
-    
+
     [root] = your.project.root.*
     [port] = your.project.root.domain.*
     [adapters] = [root] excluding [port]
 
     check [port] independentOf [adapters]
-    
+
 另一方面，重视依赖检查也可能反过来促进制定合理的架构约束。以下两种划分package的方案，你更倾向于哪种呢？
 
 list-5 方案一：按职责划分
@@ -120,9 +120,9 @@ list-5 方案一：按职责划分
     	User
     	Transaction
     	Shipment
-    	
+
 list-6 方案二：按领域划分
-	
+
 	user/
     	UserRepository
     	UserSerializer
@@ -139,11 +139,11 @@ list-6 方案二：按领域划分
 假设user不应该依赖transaction的话，第一种方案需要将检查规则定义到类的级别，而第二种方案能以较粗的粒度（package）来管理依赖关系，这样更为经济高效。
 
 ### 为什么不使用embedded defination  
-   
+
 classycle-maven-plugin还支持把依赖规则嵌入到pom.xml中，但我更推荐使用单独的规则文件。一方面，随着项目的衍化，需要检查的规则可能会增长，一大段堆规则文本会使得pom.xml变得很臃肿，另一方面，单独的规则文件方便团队对比规历史版本，查看其修订记录及原因。
 
 ### gradle 项目  
-   
+
 对于gradle项目，我暂时还没有找到现成的插件，不过classycle本身支持ant task，所以可以用gradle ant插件来集成。
 
 ### 参考资料
@@ -153,4 +153,3 @@ classycle-maven-plugin还支持把依赖规则嵌入到pom.xml中，但我更推
 [classycle-maven-plugin](https://github.com/hcoles/classycle-maven-plugin)
 
 [directory per domain model or directory per layer, role](http://stackoverflow.com/questions/21225937/directory-per-domain-model-or-directory-per-layer-role/21226273#21226273)
-
