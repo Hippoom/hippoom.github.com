@@ -2,7 +2,7 @@
 
 title:   使用乐观锁/悲观锁处理数据库并发
 category: ramblings  
-layout: default
+layout: post
 
 ---
 
@@ -65,10 +65,10 @@ if (rowAffected == 0) {
 | name = ?                                            |
 | where resource_id = ? and version = ?               | select * from t_irs_resource where resource_id = ?
 |                                                     |  
-| commit txn                                          | update t_irs_resource set                           
-|                                                     | version = version + 1，                            
-|                                                     | name = ?                                          
-|                                                     | where resource_id = ? and version = ?    
+| commit txn                                          | update t_irs_resource set
+|                                                     | version = version + 1，
+|                                                     | name = ?
+|                                                     | where resource_id = ? and version = ?
 |                                                     |  
 |                                                     | rolls back because version is dirty
 {% endhighlight %}
@@ -79,15 +79,15 @@ if (rowAffected == 0) {
 | the first transaction started                       |
 |                                                     | the second transaction started
 | select * from t_irs_resource where resource_id = ?  |
-|                                                     | select * from t_irs_resource where resource_id = ? 
+|                                                     | select * from t_irs_resource where resource_id = ?
 | update t_irs_resource set                           |
-| version = version + 1，                             | update t_irs_resource set           
+| version = version + 1，                             | update t_irs_resource set
 | name = ?                                            | version = version + 1，
-| where resource_id = ? and version = ?               | name = ?   
-|                                                     | where resource_id = ? and version = ?    
-| commit txn                                          |                 
+| where resource_id = ? and version = ?               | name = ?
+|                                                     | where resource_id = ? and version = ?
+| commit txn                                          |
 |                                                     | rollback txn because version comparing fails
-|                                                     |                                        
+|                                                     |
 {% endhighlight %}
 
 在这种情况下，第二个事务的update由于不能读取第一个事务未提交的数据，它会认为version没有问题从而提交成功，破坏了数据一致性。这时最好使用hibernate这样的orm框架，通过试验（我在update语句之后，方法(即事务边界)退出前，让线程sleep 10秒，这时用另一个事务修改数据来检查结果）它可以解决这个问题，这是因为hibernate只有在事务提交时才把sql语句发送到数据库执行（而iBATIS则是按照代码顺序依次执行）。
@@ -124,10 +124,10 @@ hibernate会自动帮我们完成乐观锁的检查工作。
 | version = version + 1，                             | the second transaction started
 | name = ?                                            |
 | where resource_id = ? and version = ?               | select * from                                       |
-|                                                     | t_irs_resource where resource_id = ? for update 
-| commit txn                                          | 
+|                                                     | t_irs_resource where resource_id = ? for update
+| commit txn                                          |
 |                                                     | wait until lock released
-|                                                     | 
+|                                                     |
 {% endhighlight %}
 
 ##### iBATIS

@@ -2,7 +2,7 @@
 
 title:   避免使用事件来传递上下文
 category: flaw  
-layout: default
+layout: post
 
 ---
 
@@ -68,13 +68,3 @@ layout: default
     ## 由于客户主动要求取消
     OrderCanceledByCustomerEvent extends OrderCanceledEvent {
     }
-
-
-
-
-
-
-
-
-
-

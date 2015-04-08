@@ -2,7 +2,7 @@
 
 title:   不要借用别人的身份证  
 category: flaw  
-layout: default
+layout: post
 
 ---
 

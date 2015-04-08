@@ -2,7 +2,7 @@
 
 title:   JAVA异常设计FAQ
 category: ramblings  
-layout: default
+layout: post
 
 ---
 
@@ -15,9 +15,9 @@ A:这是一个好问题。不过强烈推荐将自定义的异常设计为非受
 Listing-1 nested throws
 {% highlight java %}
 public class TopService {
-    
+
     private MiddleService mService;
-    
+
     public void doBusiness() throws ACustomeCheckedException {
         mService.doBusiness();
     }
@@ -25,9 +25,9 @@ public class TopService {
 }
 
 public class MiddleService {
-    
+
     private Dao dao;
-    
+
     public void doBusiness() throws ACustomeCheckedException {
         dao.save();
     }
@@ -35,7 +35,7 @@ public class MiddleService {
 }
 
 public class Dao {
-    
+
    public void doBusiness() throws ACustomeCheckedException {
         //omitted persistence logic
     }
@@ -66,7 +66,7 @@ public class Order {
         }
 
         if (order.isCanceled()) {
-            throw new CannotCancelOrderException(); 
+            throw new CannotCancelOrderException();
         }
         //omitted code
     }
@@ -75,7 +75,7 @@ public class Order {
 
 如果重构一下，修改为这样就好多了：
 
-Listing-3 exception with context and description 
+Listing-3 exception with context and description
 {% highlight java %}
 public class Order {
 
@@ -92,7 +92,7 @@ public class Order {
 }
 
 public class CannotCancelOrderException extends RuntimeException {
-    
+
     public static CannotCancelOrderException hasBeenLocked(String orderId) {
         return new CannotCancelOrderException("order["+ orderId + "] has been locked");
     }
@@ -109,7 +109,7 @@ public class CannotCancelOrderException extends RuntimeException {
 
 如果你的异常是由其他异常导致的，可别把cause落下了：
 
-Listing-4 wrapped exception 
+Listing-4 wrapped exception
 
 {% highlight java %}
 public class Order {
@@ -118,12 +118,12 @@ public class Order {
         //omitted code
         } catch (SupplierAccessException e) {  
             throw CannotCancelOrderException.wrapped(orderId, e);  
-        } 
+        }
     }
 }
 
 public class CannotCancelOrderException extends RuntimeException {
-    
+
     //omitted factory methods and constructors
 
     public static CannotCancelOrderException wrapped(String orderId, Throwable t) {  
@@ -150,7 +150,7 @@ String orderId = placeOrderService.placeOrder(productCode, quantity, price);
 Listing-6
 {% highlight java %}
 try {  
-    orderId = placeOrderService.placeOrder(productCode, quantity, price);   
+    orderId = placeOrderService.placeOrder(productCode, quantity, price);
 } catch (Exception e) {  
     model.addAttribute("error", e.getMessage());  
     //omitted logging code if placeOrderService doesn't log on it own
@@ -166,7 +166,7 @@ A: 如果要返回错误码而不是直接抛出异常，那么总会有一个�
 Listing-7 hard coded status code translation
 {% highlight java %}
 try {  
-    orderId = placeOrderService.placeOrder(productCode, quantity, price);   
+    orderId = placeOrderService.placeOrder(productCode, quantity, price);
 } catch (InsufficientInventoryException e) {  
     statusCode = INSUFFICIENT_INVENTORY;  
 } catch (ExpriedPriceException e) {  
@@ -187,7 +187,7 @@ public class PlaceOrderServiceFacadeImpl implements PlaceOrderServiceFacade {
     public PlaceOrderRs handle(PlaceOrderRq rq) {
         //omitted code
         try {  
-            orderId = placeOrderService.placeOrder(productCode, quantity, price);   
+            orderId = placeOrderService.placeOrder(productCode, quantity, price);
             statusCode = SUCCESS;
         } catch (UncheckedApplicationException e) {  
             statusCode = e.getStatusCode();  
@@ -207,14 +207,14 @@ public abstract class UncheckedApplicationException {
 
 要新增异常的话，只需要让其继承UncheckedApplicationException并实现getStatusCode()即可。同样的，如果除了要告知statusCode，如果还需要返回本地化的提示信息，还可以加上getI18nCode()、getI18nArgs()这样的方法：
 
-Listing-9 i18 supported exception hierachy 
+Listing-9 i18 supported exception hierachy
 {% highlight java %}
 public class PlaceOrderServiceFacadeImpl implements PlaceOrderServiceFacade {
 
     public PlaceOrderRs handle(PlaceOrderRq rq) {
         //omitted code
         try {  
-            orderId = placeOrderService.placeOrder(productCode, quantity, price);   
+            orderId = placeOrderService.placeOrder(productCode, quantity, price);
             statusCode = SUCCESS;
             message = messageSource.getSuccess(locale));
         } catch (UncheckedApplicationException e) {  
@@ -232,7 +232,7 @@ public abstract class UncheckedApplicationException {
 
     //omitted factory methods and constructors
     public abstract String getStatusCode();
-    
+
     public abstract String getI18nCode();
 
     public abstract String[] getI18nArgs();
@@ -253,7 +253,7 @@ public class PlaceOrderServiceFacadeImpl implements PlaceOrderServiceFacade {
     public QuoteRs handle(QuoteRq rq) {
         //omitted code
         try {  
-            //omitted quoting code 
+            //omitted quoting code
             statusCode = SUCCESS;
             message = messageSource.getSuccess(locale));
         } catch (UncheckedApplicationException e) {  
@@ -269,7 +269,7 @@ public class PlaceOrderServiceFacadeImpl implements PlaceOrderServiceFacade {
     public PlaceOrderRs handle(PlaceOrderRq rq) {
         //omitted code
         try {  
-            orderId = placeOrderService.placeOrder(productCode, quantity, price);   
+            orderId = placeOrderService.placeOrder(productCode, quantity, price);
             statusCode = SUCCESS;
             message = messageSource.getSuccess(locale));
         } catch (UncheckedApplicationException e) {  
@@ -285,7 +285,7 @@ public class PlaceOrderServiceFacadeImpl implements PlaceOrderServiceFacade {
 {% endhighlight %}
 
 Listing-10 an around advice catching exception
-{% highlight java %} 
+{% highlight java %}
 public class LogAndReturnHandler implements MethodInterceptor {
 	@Setter
 	private LoggingSupport loggingSupport;
@@ -333,20 +333,20 @@ public class LogAndReturnHandler implements MethodInterceptor {
 
 public class PlaceOrderServiceFacadeImpl implements PlaceOrderServiceFacade {
     public QuoteRs handle(QuoteRq rq) {
-       
-        //omitted quoting code 
-       
+
+        //omitted quoting code
+
         return new QuoteRs(SUCCESS, quotes, successMessageFor(locale));
     }
 
     public PlaceOrderRs handle(PlaceOrderRq rq) {
         //omitted code
-      
-        orderId = placeOrderService.placeOrder(productCode, quantity, price);            
-        
+
+        orderId = placeOrderService.placeOrder(productCode, quantity, price);
+
         return new PlaceOrderRs(SUCCESS, order, successMessageFor(locale));
     }
-    
+
     private String successMessageFor(Locale locale) {
         return messageSource.getSuccess(locale));
     }
@@ -393,10 +393,10 @@ public class GenericApplicationException extends RuntimeException {
 Listing-10 CannotCancelOrderException
 {%  highlight java %}
 public class CannotCancelOrderException extends UncheckedApplicationException {
-    
+
     private String orderId;
     private String i18nCode;
-    
+
     public static CannotCancelOrderException hasBeenLocked(String orderId) {
         return new CannotCancelOrderException("order["+ orderId + "] has been locked", orderId, "i18n.order.orderHasBeenLocked");
     }
@@ -410,7 +410,7 @@ public class CannotCancelOrderException extends UncheckedApplicationException {
         this.orderId = orderId;
         this.i18nCode = i18nCode;
     }
-   
+
     @Override
     public String getStatusCode() {
          return CANNOT_CANCEL_ORDER;

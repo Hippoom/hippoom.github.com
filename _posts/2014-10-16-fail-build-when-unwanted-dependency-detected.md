@@ -2,7 +2,7 @@
 
 title: 用classycle自动代码走查  
 category: continuous delivery  
-layout: default
+layout: post
 
 ---
 
