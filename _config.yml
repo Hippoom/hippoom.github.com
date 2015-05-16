@@ -27,6 +27,7 @@ name : Hippoom's blog
 brand : Home
 description :
 url : http://hippoom.github.io
+#url: http://localhost:4000
 email : hippoom@gmail.com
 author: Hippoom
 permalink: blogs/:title.html
@@ -548,8 +549,8 @@ rss :
 #   shortname : TheDereck
 #   show_comment_count : false
 disqus :
-  enabled : false
-  shortname : myshortname
+  enabled : true
+  shortname : hippoom
   show_comment_count : true
 
 
