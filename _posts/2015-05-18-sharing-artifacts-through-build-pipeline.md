@@ -61,4 +61,24 @@ QA不再被动响应二进制包的部署，而是以“拉”模式主动选取
 
 ### 利用外部制品仓库
 
-&emsp;&emsp;我会在后续的博客中介绍如何集成外部制品仓库，比如Nexus
+&emsp;&emsp;还有一种常见的方案是集成外部仓库，有一些成熟的仓库产品，
+比如[Nexus](http://www.sonatype.org/nexus/go/)。
+在构建任务中，将生成的二进制包发布到外部仓库中并通过环境变量将二进制包的信息传递给下游任务。
+下游任务按收到的信息下载二进制包即可实现。
+
+大部分外部仓库都提供了REST接口，你可以用过脚本通过http协议来实现下载，也可以考虑让Jenkins的插件[Repository Connector Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Repository+Connector+Plugin)来处理。
+
+在下游任务中，你可以使用Build一节的Artifact Resolver来下载二进制包，它支持环境变量，这样就可以灵活地指定二进制包的版本了。
+
+![Artifact Resolver](/images/sharing-artifacts-through-build-pipeline/artifact-resolver.png)
+
+接下来修改构建任务，使用[Parameterized Trigger plugin](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Trigger+Plugin)，
+它支持将一个properties文件中的key-value转换成环境变量传递给下游任务。
+在你的构建脚本中，将二进制包的信息记录到这个properties文件中，这样下游任务就能拿到本次构建生成的二进制包信息了。
+
+![Properties as env vars](/images/sharing-artifacts-through-build-pipeline/properties-as-env-vars.png)
+
+### 总结
+
+&emsp;&emsp;在流水线中正确地传递二进制包是非常重要的，但又很容易被忽视。
+我们回顾了一些常见的反模式，也介绍了两种常见的解决方案，希望对你有帮助。
