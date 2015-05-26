@@ -176,11 +176,11 @@ sections:
     social_links :
       enabled : false
     github_projects :
-      enabled : false
+      enabled : true
   social_links :
     enabled : false
   github_projects :
-    enabled : false
+    enabled : true
   external_links :
     enabled : false
   archive :
@@ -219,7 +219,7 @@ navbar :
   tags :
     enabled : true
   github_projects :
-    enabled : false
+    enabled : true
   social_links :
     enabled : false
   external_links :
@@ -291,7 +291,7 @@ social_links :
       enabled : false
       name : GitHub
       font_awesome_icon : icon-github-alt
-      url : https://github.com/
+      url : https://github.com/Hippoom
     - link :
       enabled : false
       name: Google+
@@ -338,8 +338,8 @@ github_projects :
   header : GitHub Projects
   projects :
   - project :
-    name : gh-pages-blog
-    url : https://github.com/thedereck/gh-pages-blog
+    name : spring-test-dbunit-template
+    url : https://github.com/hippoom/spring-test-dbunit-template
 
 
 # These are links to other websites outside of the blog that are not part of
