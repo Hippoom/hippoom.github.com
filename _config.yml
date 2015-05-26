@@ -516,7 +516,7 @@ syntax_highlighting :
 #     enabled : true
 #     image : https://www.gravatar.com/avatar/0f08df91055f27.png?s=200
 rss :
-  enabled : false
+  enabled : true
   managing_editor :
     enabled : false
     managing_editor : false
