@@ -19,7 +19,7 @@ layout: post
 这种方案只所以流行可能要“归功”于一款插件：[Clone Workspace SCM Plug-in](https://wiki.jenkins-ci.org/display/JENKINS/Clone+Workspace+SCM+Plugin)，
 这款插件可以打包Workspace，这样二进制包就被保存下来供后续步骤复用。
 
-![只能选择最近的构建](/images/sharing-artifacts-through-build-pipeline/clone-workspace-scm-plugin.png)
+<img src="images/sharing-artifacts-through-build-pipeline/clone-workspace-scm-plugin.png" width="350px"/>
 
 遗憾的是，下游步骤只能选择**最新**的上游构建的Workspace，这在大部分情况下没有问题，
 但并不是每个构建步骤都会触发下游步骤，这种情况多见于进入QA流程的步骤，在部署流水线中，
@@ -32,7 +32,7 @@ QA不再被动响应二进制包的部署，而是以“拉”模式主动选取
 但实际上将被部署的是workspace-clone-commit#9生成的二进制包。
 这个方案还有一个邪恶的变体：下游步骤指定使用上游步骤的Workspace。
 
-![邪恶的变体](/images/sharing-artifacts-through-build-pipeline/use-custom-workspace.png)
+<img src="images/sharing-artifacts-through-build-pipeline/use-custom-workspace.png" width="350px"/>
 
 这个问题的可怕之处在于，你可能会将没有做好发布准备的二进制包**意外**地发布到生产环境中去。
 
@@ -41,7 +41,7 @@ QA不再被动响应二进制包的部署，而是以“拉”模式主动选取
 &emsp;&emsp;拷贝Workspace是不靠谱的，你需要建立二进制包与构建它的部署流水线之间的联系，
 这样才能保证取到正确的二进制包。常见的做法是引入二进制包仓库（以下简称制品仓库）。
 
-![制品仓库](/images/sharing-artifacts-through-build-pipeline/publish-to-artifact-repo.png)
+<img src="images/sharing-artifacts-through-build-pipeline/publish-to-artifact-repo.png" width="350px"/>
 
 ### Jenkins自身作为制品仓库
 
@@ -51,11 +51,11 @@ QA不再被动响应二进制包的部署，而是以“拉”模式主动选取
 利用[Parameterized Trigger plugin](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Trigger+Plugin)和[Build Pipeline Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin)的Manual Trigger
 可以分别向自动、手动触发的下游任务传递环境变量，在变量中加入本次构建的build number：
 
-![传递构建编号](/images/sharing-artifacts-through-build-pipeline/trigger-downstream-with-build-number.png)
+<img src="images/sharing-artifacts-through-build-pipeline/trigger-downstream-with-build-number.png" width="350px"/>
 
 下游步骤利用[Copy Artifact Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Copy+Artifact+Plugin)（一定要使用specific build）就可以精确地拷贝二进制包了：
 
-![拷贝指定构建的制品](/images/sharing-artifacts-through-build-pipeline/copy-artifact-from-specific-build.png)
+<img src="images/sharing-artifacts-through-build-pipeline/copy-artifact-from-specific-build.png" width="350px"/>
 
 现在，二进制包就可以正确地在部署流水中流转复用了。
 
@@ -70,13 +70,13 @@ QA不再被动响应二进制包的部署，而是以“拉”模式主动选取
 
 在下游任务中，你可以使用Build一节的Artifact Resolver来下载二进制包，它支持环境变量，这样就可以灵活地指定二进制包的版本了。
 
-![Artifact Resolver](/images/sharing-artifacts-through-build-pipeline/artifact-resolver.png)
+<img src="images/sharing-artifacts-through-build-pipeline/artifact-resolver.png" width="350px"/>
 
 接下来修改构建任务，使用[Parameterized Trigger plugin](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Trigger+Plugin)，
 它支持将一个properties文件中的key-value转换成环境变量传递给下游任务。
 在你的构建脚本中，将二进制包的信息记录到这个properties文件中，这样下游任务就能拿到本次构建生成的二进制包信息了。
 
-![Properties as env vars](/images/sharing-artifacts-through-build-pipeline/properties-as-env-vars.png)
+<img src="images/sharing-artifacts-through-build-pipeline/properties-as-env-vars.png" width="350px"/>
 
 ### 总结
 
