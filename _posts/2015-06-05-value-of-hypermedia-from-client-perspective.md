@@ -1,15 +1,15 @@
 ---
 
-title:   从消费者的角度评估Rest的价值
+title:   从消费者的角度评估REST的价值
 category: rest  
 layout: post
 
 ---
 
-&emsp;&emsp;Rest是目前业界相当火热的术语，似乎发布的API不带个Rest前缀，你都不好意思和别人打招呼了。
-然而大部分号称Rest的API实际上并没有达到[Richardson成熟度模型](http://martinfowler.com/articles/richardsonMaturityModel.html)的第三个级别：Hypermedia。
-而Rest的发明者Roy Fielding博士更是直言[“Hypermedia作为应用引擎”是Rest的前提，
-这不是一个可选项，如果没有Hypermedia，那就不是Rest。](http://www.infoq.com/articles/roy-fielding-on-versioning)(摘自Infoq对Fielding博士的第二段访谈)
+&emsp;&emsp;REST是目前业界相当火热的术语，似乎发布的API不带个REST前缀，你都不好意思和别人打招呼了。
+然而大部分号称REST的API实际上并没有达到[Richardson成熟度模型](http://martinfowler.com/articles/richardsonMaturityModel.html)的第三个级别：Hypermedia。
+而REST的发明者Roy Fielding博士更是直言[“Hypermedia作为应用引擎”是REST的前提，
+这不是一个可选项，如果没有Hypermedia，那就不是REST。](http://www.infoq.com/articles/roy-fielding-on-versioning)(摘自Infoq对Fielding博士的第二段访谈)
 
 ### 什么是Hypermedia？
 &emsp;&emsp;那究竟什么是Hypermedia？
@@ -135,7 +135,7 @@ API的发布方也需要增加新功能，API自身也会随着需求变化，�
 然而一套API一般会包括多个API，为整套API版本化的粒度太粗了。
 一旦消费者希望获得其中某个API的新特性，他/她只能选择全盘升级并仔细测试或者为每个集成点配置单独的uri。
 这都不够好，而Hypermedia可以改变这种局面。
-由于提供了链接来告诉消费者资源的uri，相对“传统”的Rest API，uri变成了一种弱耦合，
+由于提供了链接来告诉消费者资源的uri，相对“传统”的REST API，uri变成了一种弱耦合，
 Hypermedia API只需要公布少量入口uri就可以了。比如，以之前酒店订单的例子，只需发布
 
     http://www.zhaodaisuo.com/orders
