@@ -6,7 +6,7 @@ layout: post
 
 ---
 
-&emsp;&emsp;在之前的一篇[用spring-test、dbunit、flyway测试Java持久层](/blogs/2015-05-18-sharing-artifacts-through-build-pipeline.html)中，我曾介绍过使用[spring-test-dbunit](http://springtestdbunit.github.io/spring-test-dbunit/)提供的@DatabaseSetup和@ExpectedDatabase简化测试断言的方法，但使用这种办法也有痛点：
+&emsp;&emsp;在之前的一篇[用spring-test、dbunit、flyway测试Java持久层](/blogs/java-persistence-test.html)中，我曾介绍过使用[spring-test-dbunit](http://springtestdbunit.github.io/spring-test-dbunit/)提供的@DatabaseSetup和@ExpectedDatabase简化测试断言的方法，但使用这种办法也有痛点：
 1. 在数据准备（setup）文件和数据预期（expect）文件中存在大量重复的数据定义，随着数据结构逐渐丰富，需要同时修改这两个文件
 2. 调试过程中要在两个文件中不断切换，甚是麻烦，而且对比差异也不方便
 
