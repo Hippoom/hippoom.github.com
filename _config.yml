@@ -26,8 +26,8 @@
 name : Hippoom's blog
 brand : Home
 description :
-url : http://hippoom.github.io
-#url: http://localhost:4000
+#url : http://hippoom.github.io
+url: http://localhost:4000
 email : hippoom@gmail.com
 author: Hippoom
 permalink: blogs/:title.html
@@ -572,8 +572,8 @@ disqus :
 #     enabled : true
 #     tracking_id : UA-1234567
 analytics :
-  enabled : true
-  #enabled : false
+  #enabled : true
+  enabled : false
   google_analytics :
     enabled : true
     tracking_id : UA-56485020-1
