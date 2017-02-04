@@ -207,5 +207,6 @@ build.dependsOn installGitHooks //设置执行build任务时会自动触发insta
   - 开发环境检查（使用各构建工具的Checkstyle插件）
   - 自动提交检查（git pre-commit hook与共享）
   - IDE增强（checkstyle插件实时可视化反馈/自动的自动格式化！）
+  - 以上的工具都要依据为同一份Checkstyle配置文件，并纳入版本控制
 
 好了，希望以上这些招数可以解救Java Code Style强迫症 ：）
