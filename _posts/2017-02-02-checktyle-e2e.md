@@ -22,7 +22,7 @@ private Listener listener = new Listener() // So Listener looks like a class?
 {}; // Oops, it is an interface
 ```
 
-如果代码可读性还不足以打动你，那么想象一下这个场景，你的同事告诉你他修复了两个空指针问题，请你帮忙Code Review，你比较了这个文件的修订历史，乍看之下有许多改动，看来是个大动作。然后事实上，绝大部分部分是代码格式调整，只有两处改动与需要Review的问题相关的。
+如果代码可读性还不足以打动你，那么想象一下这个场景，你的同事告诉你他修复了两个空指针问题，请你帮忙Code Review，你查看了这个文件的修订历史，乍看之下有许多改动，看来是个大动作。然而事实上，绝大部分改动是代码格式调整，只有两处改动与需要Review的问题相关的。
 
 ![git blame](/images/checkstyle-e2e/happy-code-review.jpg)    
 
@@ -45,7 +45,7 @@ private Listener listener = new Listener() // So Listener looks like a class?
 
 ### 懒惰是第一生产力
 
-工程实践不能没有自动化工具支持，在java生态圈中，Code Style工具最出名的应该是Checkstyle了，它可以通过XML形式的[外部DSL](https://martinfowler.com/books/dsl.html)来定义Code Style的检查风格，比如你可以从这里找到[Google的Java Checkstyle配置文件](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml)。这里我不会详细介绍Checkstyle本身，相反，我会更多地探讨如何如何工程化地使用Checkstyle，在交付代码的各个活动中，我们都可以用到Checkstyle，360°无死角检查。
+工程实践不能没有自动化工具支持，在java生态圈中，Code Style工具最出名的应该是Checkstyle了，它可以通过XML形式的[外部DSL](https://martinfowler.com/books/dsl.html)来定义Code Style的检查风格，比如你可以从这里找到[Google的Java Checkstyle配置文件](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml)。这里我不会详细介绍Checkstyle本身，相反，我会更多地探讨如何工程化地使用Checkstyle，在交付代码的各个活动中，我们都可以用到Checkstyle，360°无死角检查。
 
 ![git blame](/images/checkstyle-e2e/lifecycle-overview.jpg)
 
@@ -195,6 +195,7 @@ build.dependsOn installGitHooks //设置执行build任务时会自动触发insta
 如果你连自动格式化都懒得按，那可以试试[Save Actions](https://github.com/dubreuia/intellij-plugin-save-actions)插件，它可以在Intellij保存文件时自动执行代码格式化等动作。
 
 <img src="/images/checkstyle-e2e/save-actions.jpg" width="350px"/>
+
 > 这个插件目前对部分文件有些问题，可以通过File path exclusion忽略
 
 ### 总结
