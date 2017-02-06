@@ -7,6 +7,16 @@ layout: post
 
 
 
+## 要点
+
+- Code Style不是个人喜好问题，它会影响工作效率，团队应将其当做工程实践予以重视
+
+- Code Style需要端到端的工具支持，尽早解决问题，避免技术债
+
+- 以Checkstyle作为核心工具支撑Java项目的Code Style实施方案
+
+  ​
+
 ### Code Style是一项工程实践
 
 ![header](/images/checkstyle-e2e/style.jpg)    
@@ -15,7 +25,7 @@ layout: post
 
 ![git blame](/images/checkstyle-e2e/gitblame.jpg)
 
-事实上，这并不是强迫症，如果没有按照惯例来编写代码，甚至会让阅读者产生疑惑。
+嗯，可能我确实对代码风格有些强迫症，但事实上，Code Style并不仅仅是代码是否好看那么简单，如果没有按照惯例来编写代码，甚至会让阅读者产生疑惑。
 
 ```java
 private Listener listener = new Listener() // So Listener looks like a class?  
