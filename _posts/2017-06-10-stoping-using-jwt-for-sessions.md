@@ -126,8 +126,8 @@ amount=100.00&routingNumber=1234&account=9876
 与上一条类似，JWT有点类似缓存，由于无法作废已颁布的令牌，在其过期前，你只能忍受“过期”的数据。
 
 看到这里后，你可能发现，将JWT保存在Local Storage中，并使用JWT来管理session并不是一个好主意，那有没有可能”正确"地使用JWT来管理session呢？比如：
-a) 不再使用Local Storage存储JWT，使用cookie，并且设置HttpOnly=true，这意味着只能由服务端保存以及通过自动回传的cookie取得JWT，以便防御XSS攻击
-b) 在JWT的内容中加入一个随机值作为CSRF令牌，由服务端将该CSRF令牌也保存在cookie中，但设置HttpOnly=false，这样前端Javascript代码就可以取得该CSRF令牌，并在请求API时作为HTTP header传回。服务端在认证时，从JWT中取出CSRF令牌与header中获得CSRF令牌比较，从而实现对CSRF攻击的防护
+a) 不再使用Local Storage存储JWT，使用cookie，并且设置HttpOnly=true，这意味着只能由服务端保存以及通过自动回传的cookie取得JWT，以便防御XSS攻击  
+b) 在JWT的内容中加入一个随机值作为CSRF令牌，由服务端将该CSRF令牌也保存在cookie中，但设置HttpOnly=false，这样前端Javascript代码就可以取得该CSRF令牌，并在请求API时作为HTTP header传回。服务端在认证时，从JWT中取出CSRF令牌与header中获得CSRF令牌比较，从而实现对CSRF攻击的防护  
 c) 考虑到cookie的空间限制（大约4k左右），在JWT中尽可能只放”够用”的认证信息，其他信息放在数据库，需要时再获取，同时也解决之前提到的数据过期问题
 
 这个方案看上去是挺不错的，恭喜你，你**重新发明**了cookie-session，可能实现还不一定有现有的好。
