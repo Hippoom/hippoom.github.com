@@ -71,7 +71,7 @@ Authorization: Bearer eyJhbGci*...<snip>...*yu5CSpyHI
 
 1. **该方案更易于水平扩展**
 
-确实如此，在cookie-session方案中，cookie内仅包含一个session标识符，而诸如用户信息、授权列表等都保存在服务端的session中。如果把session中的认证信息都保存在JWT中，在服务端就没有session存在的必要了。当服务端水平扩展的时候，就不用处理session复制（cookie Replication）/session黏连（Sticky cookie）或是引入外部session存储了。但实际上外部session存储方案已经非常成熟了（比如Redis），在一些Framework的帮助下（比如[spring-cookie](HTTP://docs.spring.io/spring-cookie/docs/current/reference/html5/guides/hazelcast-spring.html)和[hazelcast](https://hazelcast.com/)），session复制也并没有想象中的麻烦。所以除非你的应用访问量非常非常非常(此处省略N个非常）大，使用cookie-session配合外部session存储完全够用了。
+在cookie-session方案中，cookie内仅包含一个session标识符，而诸如用户信息、授权列表等都保存在服务端的session中。如果把session中的认证信息都保存在JWT中，在服务端就没有session存在的必要了。当服务端水平扩展的时候，就不用处理session复制（session replication）/ session黏连（sticky session）或是引入外部session存储了。从这个角度来说，这个优点确实存在，但实际上外部session存储方案已经非常成熟了（比如Redis），在一些Framework的帮助下（比如[spring-session](HTTP://docs.spring.io/spring-session/docs/current/reference/html5/guides/hazelcast-spring.html)和[hazelcast](https://hazelcast.com/)），session复制也并没有想象中的麻烦。所以除非你的应用访问量非常非常非常(此处省略N个非常）大，使用cookie-session配合外部session存储完全够用了。
 
 2. **该方案可防护CSRF攻击**
 
@@ -101,7 +101,7 @@ amount=100.00&routingNumber=1234&account=9876
 
 你被“点击就送”吸引了，当你点了提交按钮时你已经向攻击者的账号转了100元。 现实中的攻击可能更隐蔽，恶意网站的页面可能使用Javascript自动完成提交。尽管恶意网站没有办法盗取你的session cookie（从而假冒你的身份），但恶意网站向bank.example.com发起请求时，你的cookie会被自动发送过去。
 
-因此，有些人认为前端代码将JWT通过HTTP header发送给服务端（而不是通过cookie自动发送）可以有效防护CSRF。在这种方案中，服务端代码在完成认证后，会在HTTP response的header中返回JWT，前端代码将该JWT存放到Local Storage里待用，或是服务端直接在cookie中保存HttpOnly=false（否则前端Javascript代码无权从cookie中获取数据）的JWT。在向服务端发起请求时，用Javascript取出JWT，再通过header发送回服务端通过认证。由于恶意网站的代码无法获取bank.example.com的cookie/Local Storage中的JWT，这种方式确实能防护CSRF，但将JWT保存在cookie/Local Storage中可能会给另一种攻击可乘之机，我们一会详细讨论它：跨站脚本攻击——XSS。
+因此，有些人认为前端代码将JWT通过HTTP header发送给服务端（而不是通过cookie自动发送）可以有效防护CSRF。在这种方案中，服务端代码在完成认证后，会在HTTP response的header中返回JWT，前端代码将该JWT存放到Local Storage里待用，或是服务端直接在cookie中保存HttpOnly=false的JWT。在向服务端发起请求时，用Javascript取出JWT（否则前端Javascript代码无权从cookie中获取数据），再通过header发送回服务端通过认证。由于恶意网站的代码无法获取bank.example.com的cookie/Local Storage中的JWT，这种方式确实能防护CSRF，但将JWT保存在cookie/Local Storage中可能会给另一种攻击可乘之机，我们一会详细讨论它：跨站脚本攻击——XSS。
 
 3. **该方案更安全**
 
@@ -136,15 +136,28 @@ c) 考虑到cookie的空间限制（大约4k左右），在JWT中尽可能只放
 
 ### 那究竟JWT可以用来做什么
 
-事实上，JWT更适合一次性操作的认证:
+
+我的同事Weinan Li的做过一个形象的解释：
+
+> JWT（其实还有SAML）最适合的应用场景就是“开票”，或者”签字“。
+>
+> 在有纸化办公时代，多部门，多组织之间的协同工作往往会需要拿着A部门领导的“签字”或者“盖章”去B部门“使用”或者“访问”对应的资源，其实这种“领导签字／盖章”就是JWT，都是一种由具有一定权力的实体“签发”并“授权”的“票据”。一般的，这种票据具有可验证性（领导签名／盖章可以被验证，且难于模仿），不可篡改性（涂改过的文件不被接受，除非在涂改处再次签字确认）；并且这种票据一般都是“一次性”使用的，在访问到对应的资源后，该票据一般会被资源持有方收回留底，用于后续的审计，追溯等用途。
+
+> 举两个栗子。
+> 1. 员工李雷需要请假一天，于是填写请假申请单，李雷再获得其主管部门领导签字后，将请假单交给HR部门韩梅梅，韩梅梅确认领导签字无误后，将请假单收回，并在公司考勤表中做相应记录。
+> 2. 员工李雷和韩梅梅因工外出需要使用公司汽车一天，于是填写用车申请单，签字后李雷将申请单交给车队司机老王，乘坐老王驾驶的车辆外出办事，同时老王将用车申请单收回并存档。
+
+> 在以上的两个栗子中，”请假申请单“和”用车申请单“就是JWT中的payload，领导签字就是base64后的数字签名，领导是issuer，“HR部门的韩梅梅”和“司机老王”即为JWT的audience，audience需要验证领导签名是否合法，验证合法后根据payload中请求的资源给予相应的权限，同时将JWT收回。
+
+放到系统集成的场景中，JWT更适合一次性操作的认证:
 
 > 服务B你好, 服务A告诉我，我可以操作<JWT内容>, 这是我的凭证（即JWT）
 
-现在回想起来，我以前参与过的一个项目就有类似的场景，我们有两个团队正在将一个遗留预订系统的支付功能拆分为一个单独的服务，支付服务的目标是提供一个API，可以为一笔订单发起一次付款。在验收规格中有一条是只有订单进入“可付款”状态时，才能允许用户付款，而支付服务并没有足够的数据来验证发起支付的订单是否符合前置条件。当时的解决方案是由遗留预订系统原封不动的包装了支付服务的API，因为预订系统有足够的上下文来判断是否可以发起支付。现在回想起来真是一个糟糕的决定，因为任何对支付服务API的修改，都需要对遗留订单系统上再修改一遍，将服务拆分的收益抵消了大半。如果当时知道有JWT这项技术，可以考虑由遗留预订系统（服务A）在满足订单支付条件时，颁发一个过期时间很短的JWT给前端Web应用，前端Web应用也不用保存该JWT，直接将JWT放到Http header中向支付服务（服务B）的API发起请求，支付服务验证该JWT的签名即可以完成认证（证明遗留预订系统已经认可了订单状态可支付）。
+在这里，服务A负责认证用户身份（相当于上例中的领导），并颁布一个很短过期时间的JWT给浏览器（相当于上例中请假的员工），浏览器在向服务B的请求中带上该JWT，则服务B（相当于上例中的HR员工）可以通过验证该JWT来判断用户是否有权执行该操作。这样，服务B就成为一个安全的无状态的服务了。
 
 ![header](/images/stop-using-jwt-for-sessions/otg.png)
 
-> 遗留预订系统仍然使用传统的cookie-session来管理用户session，而新的支付服务则是无状态的，通过JWT来鉴定用户以及是否有权限支付
+
 
 ### 总结
 
