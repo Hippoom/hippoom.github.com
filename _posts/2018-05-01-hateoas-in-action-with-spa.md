@@ -12,7 +12,7 @@ layout: post
 ## 要点
 
 - HATEOAS是**Hypertext As The Engine Of Application State**的缩写。在 [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html)中, 它是REST的最高级形态
-- 单页应用正越来越受到欢迎，前后端分离的开发模式进一步细化了分工、消除了瓶颈，但同时也引入了不少重复的工作，例如一些业务规则在后端必须实现的情况下，前端也需要再实现一遍已获得更好的用户体验。HATEOAS虽然不是唯一消除这些重复的方法，但作为一种架构原则，它更容易让团队找到消除重复的“套路”
+- 单页应用正越来越受到欢迎，前后端分离的开发模式进一步细化了分工，但同时也引入了不少重复的工作，例如一些业务规则在后端必须实现的情况下，前端也需要再实现一遍以获得更好的用户体验。HATEOAS虽然不是唯一消除这些重复的方法，但作为一种架构原则，它更容易让团队找到消除重复的“套路”
 
 ### 什么是HATOEAS
 HATEOAS是**Hypertext As The Engine Of Application State**的缩写。采用Hypermedia的API在响应（response）中除了返回资源（resource）本身外，还会额外返回一组Link。 这组Link描述了对于该资源，消费者（consumer）接下来可以做什么以及怎么做。
