@@ -1,12 +1,12 @@
 ---
-title:  不就是个短信验证嘛，还真挺复杂的
+title:  软件效能度量——从吞吐量和稳定性开始
 category: rambings
 layout: post
 
 
 ---
 
-![cover](/images/4-key-metrics/cover.png)
+![cover](/images/4-key-metrics/cover.jpg)
 
 
 
