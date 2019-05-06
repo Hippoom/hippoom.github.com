@@ -1,5 +1,5 @@
 ---
-title:  软件效能度量——从吞吐量和稳定性开始
+title:  软件交付效能度量——从吞吐量和稳定性开始
 category: rambings
 layout: post
 
