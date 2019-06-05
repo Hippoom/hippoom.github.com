@@ -1,5 +1,5 @@
 ---
-title:  条件型业务规则约束的抽象与实现——从Spring Profile得到的灵感
+title:  条件型业务规则的抽象与实现——从Spring Profile得到的灵感
 category: ramblings
 layout: post
 ---
