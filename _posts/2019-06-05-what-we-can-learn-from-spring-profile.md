@@ -170,7 +170,7 @@ placeOrderRule.SIGHTSEEING.anotherConstraint1=false
 placeOrderRule.SIGHTSEEING.anotherConstraint2=true
 ```
 
-这样，既能让核心的规则校验依赖稳定的抽象，又暂时避免了给运营团队带来繁琐的配置工作。
+这样，既能让核心的规则校验依赖稳定的抽象，在变化时保持结构稳定，又暂时避免了给运营团队带来繁琐的配置工作。
 
 ### 遗留的问题
 
