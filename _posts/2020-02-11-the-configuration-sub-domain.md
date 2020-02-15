@@ -13,7 +13,7 @@ category: Ramblings
 
 简要来说，Daming的短信验证抽象允许同时存在多个Scope（可以理解为短信验证的用途），但是自带的阿里云验证码发送组件在同一时间只支持一种短信模板。也就说，虽然可以同时提供多个用途的短信验证服务，但是它们只能合用一套短信模板。
 
-![buildt-in-aliyun-sender](/images/the-configuration-sub-domain/buildt-in-aliyun-sender.png)
+![buildt-in-aliyun-sender](/images/the-configuration-sub-domain/built-in-aliyun-sender.png)
 
 如果要扩展为每个Scope使用独立的短信模板也不困难，因为阿里云验证码发送组件可以方便地取到要发送的验证码的Scope，倒是这句“是不是就得使用数据库表做配置了”引起了我的思考:
 
